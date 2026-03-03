@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Heart, Users, Shield, Award, Target, Sparkles } from "lucide-react";
-import familyPhoto from "../../assets/Family_photo.jpg";
+import familyPhoto from "../../assets/Family_photo.JPG";
 
 export function About() {
   return (
