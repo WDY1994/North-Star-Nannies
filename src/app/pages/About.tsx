@@ -31,7 +31,8 @@ export function About() {
               <img
                 src={familyPhoto}
                 alt="Family at home"
-                className="w-full h-[500px] object-cover object-top rounded-2xl shadow-lg"
+                className="w-full h-[500px] object-cover rounded-2xl shadow-lg"
+                style={{ objectPosition: 'center 20%'}}
               />
             </div>
             <div>
