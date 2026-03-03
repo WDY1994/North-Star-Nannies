@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Heart, Users, Shield, Award, Target, Sparkles } from "lucide-react";
+import familyPhoto from "../../assets/Family_photo.jpg";
 
 export function About() {
   return (
@@ -28,7 +29,7 @@ export function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1629833162964-9a2522ef30c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3RoZXIlMjBmYXRoZXIlMjBiYWJ5JTIwaG9tZXxlbnwxfHx8fDE3NzE0MzcxMDR8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                src={familyPhoto}
                 alt="Family at home"
                 className="w-full h-[500px] object-cover rounded-2xl shadow-lg"
               />
