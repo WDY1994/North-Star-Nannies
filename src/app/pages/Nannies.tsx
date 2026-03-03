@@ -95,7 +95,7 @@ export function Nannies() {
               No placement fees—just quality family matches.
             </p>
             <Button asChild size="lg" className="rounded-full">
-              <Link to="/contact">Apply Now</Link>
+              <Link to="https://qualtricsxmvqpvchvrg.qualtrics.com/jfe/form/SV_bpvE7wmUAbv6M1U">Apply Now</Link>
             </Button>
           </div>
         </div>
@@ -231,7 +231,7 @@ export function Nannies() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="rounded-full">
-              <Link to="/contact">Apply Today</Link>
+              <Link to="https://qualtricsxmvqpvchvrg.qualtrics.com/jfe/form/SV_bpvE7wmUAbv6M1U">Apply Today</Link>
             </Button>
             <Button
               asChild
