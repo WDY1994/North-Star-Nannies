@@ -4,13 +4,6 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/select";
-import {
   ClipboardList,
   Calendar,
   CheckCircle,
@@ -18,8 +11,47 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { useState } from "react";
 
 export function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
+    null
+  );
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const form = e.currentTarget; // Store form reference before async operation
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      console.log("Web3Forms response:", data);
+
+      if (data.success) {
+        setSubmitStatus("success");
+        form.reset(); // Now safe to use the stored reference
+      } else {
+        console.error("Web3Forms error:", data);
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -94,12 +126,35 @@ export function Contact() {
                   <h2 className="font-serif text-2xl md:text-3xl mb-6 text-foreground">
                     Family Intake Form
                   </h2>
-                  <form className="space-y-6">
+                  <form
+                    className="space-y-6"
+                    onSubmit={handleSubmit}
+                  >
+                    {/* Web3Forms Access Key - Replace with your actual key from https://web3forms.com */}
+                    <input
+                      type="hidden"
+                      name="access_key"
+                      value="f072f902-e3df-4c31-a811-89ee996d3101"
+                    />
+                    {/* Subject line for the email */}
+                    <input
+                      type="hidden"
+                      name="subject"
+                      value="New Family Intake Form Submission - North Star Nanny Agency"
+                    />
+                    {/* Redirect after successful submission (optional) */}
+                    <input
+                      type="hidden"
+                      name="redirect"
+                      value="false"
+                    />
+                    
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">First Name *</Label>
                         <Input
                           id="firstName"
+                          name="First Name"
                           placeholder="Jane"
                           required
                           className="rounded-lg"
@@ -109,6 +164,7 @@ export function Contact() {
                         <Label htmlFor="lastName">Last Name *</Label>
                         <Input
                           id="lastName"
+                          name="Last Name"
                           placeholder="Smith"
                           required
                           className="rounded-lg"
@@ -120,6 +176,7 @@ export function Contact() {
                       <Label htmlFor="email">Email *</Label>
                       <Input
                         id="email"
+                        name="Email"
                         type="email"
                         placeholder="jane@example.com"
                         required
@@ -131,6 +188,7 @@ export function Contact() {
                       <Label htmlFor="phone">Phone Number *</Label>
                       <Input
                         id="phone"
+                        name="Phone Number"
                         type="tel"
                         placeholder="(801) 555-0100"
                         required
@@ -142,6 +200,7 @@ export function Contact() {
                       <Label htmlFor="city">City *</Label>
                       <Input
                         id="city"
+                        name="City"
                         placeholder="Lehi"
                         required
                         className="rounded-lg"
@@ -150,26 +209,19 @@ export function Contact() {
 
                     <div className="space-y-2">
                       <Label htmlFor="service">Service Needed *</Label>
-                      <Select>
-                        <SelectTrigger className="rounded-lg">
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="full-time">
-                            Full-Time Nanny
-                          </SelectItem>
-                          <SelectItem value="part-time">
-                            Part-Time Nanny
-                          </SelectItem>
-                          <SelectItem value="live-in">
-                            Live-In Nanny
-                          </SelectItem>
-                          <SelectItem value="night-nurse">
-                            Night Nanny
-                          </SelectItem>
-                          <SelectItem value="not-sure">Not Sure</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <select
+                        id="service"
+                        name="Service Needed"
+                        required
+                        className="flex h-9 w-full items-center justify-between rounded-lg border border-input bg-input-background px-3 py-2 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="">Select a service</option>
+                        <option value="Full-Time Nanny">Full-Time Nanny</option>
+                        <option value="Part-Time Nanny">Part-Time Nanny</option>
+                        <option value="Live-In Nanny">Live-In Nanny</option>
+                        <option value="Night Nanny">Night Nanny</option>
+                        <option value="Not Sure">Not Sure</option>
+                      </select>
                     </div>
 
                     <div className="space-y-2">
@@ -178,6 +230,7 @@ export function Contact() {
                       </Label>
                       <Input
                         id="children"
+                        name="Number & Ages of Children"
                         placeholder="e.g., 2 kids - ages 2 and 4"
                         required
                         className="rounded-lg"
@@ -188,6 +241,7 @@ export function Contact() {
                       <Label htmlFor="startDate">Desired Start Date *</Label>
                       <Input
                         id="startDate"
+                        name="Desired Start Date"
                         placeholder="e.g., March 2026"
                         required
                         className="rounded-lg"
@@ -200,6 +254,7 @@ export function Contact() {
                       </Label>
                       <Textarea
                         id="schedule"
+                        name="Approximate Schedule Needed"
                         placeholder="e.g., Monday-Friday, 8am-5pm"
                         rows={3}
                         required
@@ -213,6 +268,7 @@ export function Contact() {
                       </Label>
                       <Textarea
                         id="message"
+                        name="Tell Us About Your Family & Needs"
                         placeholder="Share any specific needs, preferences, or questions..."
                         rows={5}
                         className="rounded-lg"
@@ -223,6 +279,7 @@ export function Contact() {
                       <Label htmlFor="referral">How Did You Hear About Us?</Label>
                       <Input
                         id="referral"
+                        name="How Did You Hear About Us"
                         placeholder="Referral, Google, Facebook, etc."
                         className="rounded-lg"
                       />
@@ -232,14 +289,25 @@ export function Contact() {
                       type="submit"
                       size="lg"
                       className="w-full rounded-full"
+                      disabled={isSubmitting}
                     >
-                      Submit Intake Form
+                      {isSubmitting ? "Submitting..." : "Submit Intake Form"}
                     </Button>
 
-                    <p className="text-xs text-muted-foreground text-center">
-                      We'll review your submission and respond within 1-2
-                      business days to schedule your consultation call.
-                    </p>
+                    {submitStatus === "success" && (
+                      <p className="text-xs text-muted-foreground text-center">
+                        Your submission has been received. We'll review it and
+                        respond within 1-2 business days to schedule your
+                        consultation call.
+                      </p>
+                    )}
+
+                    {submitStatus === "error" && (
+                      <p className="text-xs text-red-500 text-center">
+                        There was an error submitting your form. Please try again
+                        later.
+                      </p>
+                    )}
                   </form>
                 </CardContent>
               </Card>
@@ -261,10 +329,10 @@ export function Contact() {
                             Email
                           </div>
                           <a
-                            href="mailto:hello@northstarnanny.com"
+                            href="mailto:northstarnanniesagency@gmail.com"
                             className="text-foreground hover:text-primary transition-colors"
                           >
-                            mortensenaubrie@gmail.com
+                            Northstarnanniesagency@gmail.com
                           </a>
                         </div>
                       </li>
@@ -325,7 +393,7 @@ export function Contact() {
                       className="w-full rounded-full border-2"
                       asChild
                     >
-                      <a href="tel:8015550100">
+                      <a href="tel:4355585750">
                         <Phone className="w-4 h-4 mr-2" />
                         Call Now
                       </a>
@@ -345,16 +413,16 @@ export function Contact() {
             Schedule Your Consultation
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Already submitted your intake? Book your consultation call directly.
+            Want to skip the intake? Book your consultation call directly.
           </p>
           <Card className="shadow-lg">
             <CardContent className="p-12">
               <Calendar className="w-16 h-16 text-primary mx-auto mb-6" />
               <p className="text-muted-foreground mb-6">
-                Calendar integration placeholder - Connect your scheduling tool here
+                Schedule a discovery call to see if we are a good fit for you.
               </p>
               <Button size="lg" className="rounded-full">
-                Book Consultation
+                Book Now
               </Button>
             </CardContent>
           </Card>
