@@ -421,7 +421,7 @@ export function Contact() {
               <p className="text-muted-foreground mb-6">
                 Schedule a discovery call to see if we are a good fit for you.
               </p>
-              <Button size="lg" className="rounded-full">
+              <Button size="lg" className="rounded-full"  onClick={() => window.open("https://calendly.com/northstarnanniesagency/30min", "_blank")}>
                 Book Now
               </Button>
             </CardContent>
